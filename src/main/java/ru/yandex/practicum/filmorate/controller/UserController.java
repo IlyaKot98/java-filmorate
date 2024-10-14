@@ -26,7 +26,7 @@ public class UserController {
     @PostMapping
     public User create (@Valid @RequestBody User user) {
         log.info("Начало создания клиента");
-        if (!user.getEmail().contains("@") && user.getEmail().isEmpty()) {
+        if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
             log.error("Клиент прислал неверную электронную почту");
             throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @!");
         }
@@ -34,13 +34,13 @@ public class UserController {
             log.error("Логин клиента пустой или содержит пробелы");
             throw new ValidationException("Логин не может быть пустым и содержать пробелы!");
         }
-        if (user.getName() == null || user.getName().isEmpty()) {
+        if (user.getName().isEmpty()) {
             log.warn("Клиент не имеет имени");
             user.setName(user.getLogin());
         }
         if (user.getBirthday().isAfter(LocalDate.now())) {
             log.error("Некорректная дата рождения клиента");
-            throw new ValidationException("Дата рождения не может быть в будущем!");
+            throw new ValidationException("Дата рождения не может быть в будущем или пустой!");
         }
         log.info("Добавляем клиента в мапу");
         user.setId(generatorIdUser);
@@ -52,7 +52,7 @@ public class UserController {
     @PutMapping
     public User update (@Valid @RequestBody User newUser) {
         log.info("Началось обновление данных клиента");
-        if (!newUser.getEmail().contains("@") && newUser.getEmail().isEmpty()) {
+        if (newUser.getEmail().isEmpty() || !newUser.getEmail().contains("@")) {
             log.error("Клиент прислал неверную электронную почту");
             throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @!");
         }
@@ -76,5 +76,4 @@ public class UserController {
         log.warn("Клиент с id = {} не найден", newUser.getId());
         throw new ValidationException("Клиент с id = " + newUser.getId() + " не найден!");
     }
-
 }

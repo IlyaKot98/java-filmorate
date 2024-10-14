@@ -27,7 +27,7 @@ public class FilmController {
     @PostMapping
     public Film create (@Valid @RequestBody Film film) {
         log.info("Начало создания фильма");
-        if (film.getName() == null || film.getName().isEmpty()) {
+        if (film.getName().isEmpty()) {
             log.error("Фильм не имеет названия");
             throw new ValidationException("Название не может быть пустым!");
         }
@@ -78,5 +78,4 @@ public class FilmController {
         log.warn("Фильм с id = {} не найден", newFilm.getId());
         throw new ValidationException("Фильм с id = " + newFilm.getId() + " не найден!");
     }
-
 }
