@@ -10,11 +10,9 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = BirthdayLetterValidator.class)
 @Documented
 public @interface BirthdayLetter {
-
     String message() default "{BirthdayLetter.invalid}";
 
     Class<?>[] groups() default { };
 
     Class<? extends Payload>[] payload() default { };
-
 }
