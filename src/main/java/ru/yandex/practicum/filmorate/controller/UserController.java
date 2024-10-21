@@ -6,7 +6,6 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -15,7 +14,7 @@ import java.util.HashMap;
 @RequestMapping("/users")
 public class UserController {
 
-    private int generatorIdUser = 1;
+    private int generatorUserId = 1;
     private final HashMap<Integer, User> users = new HashMap();
 
     @GetMapping
@@ -24,51 +23,25 @@ public class UserController {
     }
 
     @PostMapping
-    public User create (@Valid @RequestBody User user) {
+    public User create(@Valid @RequestBody User user) {
         log.info("Начало создания клиента");
-        if (user.getEmail().isEmpty() || !user.getEmail().contains("@")) {
-            log.error("Клиент прислал неверную электронную почту");
-            throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @!");
-        }
-        if (user.getLogin().isEmpty() || user.getLogin().contains(" ")) {
-            log.error("Логин клиента пустой или содержит пробелы");
-            throw new ValidationException("Логин не может быть пустым и содержать пробелы!");
-        }
         if (user.getName().isEmpty()) {
-            log.warn("Клиент не имеет имени");
             user.setName(user.getLogin());
         }
-        if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.error("Некорректная дата рождения клиента");
-            throw new ValidationException("Дата рождения не может быть в будущем или пустой!");
-        }
         log.info("Добавляем клиента в мапу");
-        user.setId(generatorIdUser);
-        users.put(generatorIdUser, user);
-        generatorIdUser++;
+        user.setId(generatorUserId);
+        users.put(generatorUserId, user);
+        generatorUserId++;
         return user;
     }
 
     @PutMapping
-    public User update (@Valid @RequestBody User newUser) {
+    public User update(@Valid @RequestBody User newUser) {
         log.info("Началось обновление данных клиента");
-        if (newUser.getEmail().isEmpty() || !newUser.getEmail().contains("@")) {
-            log.error("Клиент прислал неверную электронную почту");
-            throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @!");
-        }
-        if (newUser.getLogin().isEmpty() || newUser.getLogin().contains(" ")) {
-            log.error("Логин клиента пустой или содержит пробелы");
-            throw new ValidationException("Логин не может быть пустым и содержать пробелы!");
-        }
         if (newUser.getName().isEmpty()) {
             log.warn("Клиент не имеет имени");
             newUser.setName(newUser.getLogin());
         }
-        if (newUser.getBirthday().isAfter(LocalDate.now())) {
-            log.error("Некорректная дата рождения клиента");
-            throw new ValidationException("Дата рождения не может быть в будущем!");
-        }
-
         if (users.containsKey(newUser.getId())) {
             users.put(newUser.getId(), newUser);
             return newUser;
