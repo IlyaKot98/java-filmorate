@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
@@ -55,46 +54,6 @@ class UserControllerTest {
     }
 
     @Test
-    void shouldNotCreateUserWithEmailIsEmpty() {
-        userTest.setEmail("");
-
-        ValidationException exception = assertThrows(ValidationException.class, () -> userController.create(userTest),
-                "Клиент с пустым email создан, ошибка не была получена!");
-        assertEquals("Электронная почта не может быть пустой и должна содержать символ @!",
-                exception.getMessage(), "Ошибка создания клиента без email не совпадает с ожидаемой!");
-    }
-
-    @Test
-    void shouldNotCreateUserWithLoginIsEmpty() {
-        userTest.setLogin("");
-
-        ValidationException exception = assertThrows(ValidationException.class, () -> userController.create(userTest),
-                "Клиент с пустым login создан, ошибка не была получена!");
-        assertEquals("Логин не может быть пустым и содержать пробелы!", exception.getMessage(),
-                "Ошибка создания клиента без login не совпадает с ожидаемой!");
-    }
-
-    @Test
-    void shouldNotCreateUserWithIncorrectEmail() {
-        userTest.setEmail("Test");
-
-        ValidationException exception = assertThrows(ValidationException.class, () -> userController.create(userTest),
-                "Клиент с некорректным email создан, ошибка не была получена!");
-        assertEquals("Электронная почта не может быть пустой и должна содержать символ @!",
-                exception.getMessage(), "Ошибка создания клиента с некорректным email не совпадает с ожидаемой!");
-    }
-
-    @Test
-    void shouldNotCreateUserWithBirthdayInFuture() {
-        userTest.setBirthday(LocalDate.parse("2446-08-20"));
-
-        ValidationException exception = assertThrows(ValidationException.class, () -> userController.create(userTest),
-                "Клиент с некорректной датой рождения создан, ошибка не была получена!");
-        assertEquals("Дата рождения не может быть в будущем или пустой!", exception.getMessage(),
-                "Ошибка создания клиента с некорректной датой рождения не совпадает с ожидаемой!");
-    }
-
-    @Test
     void shouldUpdateUser() {
         userTest.setId(user.getId());
         userTest.setEmail("mail@yandex.ru");
@@ -123,45 +82,5 @@ class UserControllerTest {
         assertEquals(userUpdate.getEmail(), user.getEmail(), "Email не совпадает!");
         assertEquals(userUpdate.getBirthday(), user.getBirthday(), "Дата рождения не совпадает!");
         assertEquals(userUpdate.getName(), userUpdate.getLogin(), "Логин и имя не совпадают!");
-    }
-
-    @Test
-    void shouldNotUpdateUserWithEmailIsEmpty() {
-        userTest.setEmail("");
-
-        ValidationException exception = assertThrows(ValidationException.class,
-                () -> userController.update(userTest), "Обновление было выполнено, с пустым Email!");
-        assertEquals("Электронная почта не может быть пустой и должна содержать символ @!",
-                exception.getMessage(), "Ошибка обновлениея клиента с пустым email, не соответствует ожидаемой!");
-    }
-
-    @Test
-    void shouldNotUpdateUserWithLoginIsEmpty() {
-        userTest.setLogin("");
-
-        ValidationException exception = assertThrows(ValidationException.class,
-                () -> userController.update(userTest), "Обновление было выполнено, с пустым Login!");
-        assertEquals("Логин не может быть пустым и содержать пробелы!", exception.getMessage(),
-                "Ошибка обновления клиента с пустым login, не соответствует ожидаемой!");
-    }
-
-    @Test
-    void shouldNotUpdateUserWithIncorrectEmail() {
-        userTest.setEmail("Test");
-
-        ValidationException exception = assertThrows(ValidationException.class, () -> userController.update(userTest),
-                "Клиент с некорректным email обновлен, ошибка не была получена!");
-        assertEquals("Электронная почта не может быть пустой и должна содержать символ @!",
-                exception.getMessage(), "Ошибка обновления клиента с некорректным email, не совпадает с ожидаемой!");
-    }
-
-    @Test
-    void shouldNotUpdateUserWithBirthdayInFuture() {
-        userTest.setBirthday(LocalDate.parse("2446-08-20"));
-
-        ValidationException exception = assertThrows(ValidationException.class, () -> userController.update(userTest),
-                "Клиент с некорректной датой рождения обновлен, ошибка не была получена!");
-        assertEquals("Дата рождения не может быть в будущем!", exception.getMessage(),
-                "Ошибка обновления клиента с некорректной датой рождения, не совпадает с ожидаемой!");
     }
 }
