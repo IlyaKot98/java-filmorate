@@ -1,11 +1,10 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.yandex.practicum.filmorate.customValidate.BirthdayLetter;
 
 import java.time.LocalDate;
 
@@ -21,5 +20,6 @@ public class User {
     private String login;
     private String name;
     @NotNull
+    @Past
     private LocalDate birthday;
 }
